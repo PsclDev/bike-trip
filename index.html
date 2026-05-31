@@ -118,9 +118,11 @@
       border-radius: var(--radius);
       border: 1px solid var(--gray-200);
       box-shadow: var(--shadow-sm);
-      overflow: hidden;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
     }
-    .route-table { width: 100%; border-collapse: collapse; }
+    .route-table { width: 100%; min-width: 720px; border-collapse: collapse; }
     .route-table th {
       background: var(--gray-50);
       color: var(--gray-500);
@@ -208,6 +210,29 @@
     .pill.planning { background: var(--amber-dim);  color: var(--amber); }
     .pill.done     { background: var(--green-dim);  color: var(--green); }
     .pill.open     { background: var(--gray-100);   color: var(--gray-500); }
+
+    @media (max-width: 960px) {
+      main {
+        width: 94%;
+        padding: 28px 0 56px;
+      }
+      header {
+        padding: 42px 24px 36px;
+      }
+      .card-grid { grid-template-columns: 1fr; }
+      .checklist-cols { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+      .section-title { flex-wrap: wrap; gap: 8px; }
+      .route-table { min-width: 640px; }
+      .route-table th,
+      .route-table td { padding: 10px 14px; }
+    }
+
+    @media (max-width: 720px) {
+      .route-table { min-width: 560px; }
+      .route-table th,
+      .route-table td { padding: 10px 12px; font-size: .84rem; }
+      .checklist-cols { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+    }
 
     footer {
       text-align: center;
@@ -728,18 +753,6 @@
           <tr class="row-green">
             <td><strong>Reparatur</strong></td>
             <td>Schwalbe SV17 700C 28" (2×)</td>
-            <td>Bereits vorgemerkt ✓</td>
-            <td>vorgemerkt</td>
-          </tr>
-          <tr class="row-green">
-            <td><strong>Reparatur</strong></td>
-            <td>Peakspek AS250PRO Pumpe</td>
-            <td>Bereits vorgemerkt ✓ — Akku vor Abfahrt laden!</td>
-            <td>vorgemerkt</td>
-          </tr>
-          <tr class="row-green">
-            <td><strong>Reparatur</strong></td>
-            <td>Flickset (18 Patches, Tyre Lever …)</td>
             <td>Bereits vorgemerkt ✓</td>
             <td>vorgemerkt</td>
           </tr>
