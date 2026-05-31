@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fahrrad-Check — Bodensee Radtour</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent:     #2563eb;
+      --green:      #16a34a;
+      --green-dim:  #f0fdf4;
+      --amber:      #d97706;
+      --amber-dim:  #fffbeb;
+      --gray-50:    #f8fafc;
+      --gray-100:   #f1f5f9;
+      --gray-200:   #e2e8f0;
+      --gray-400:   #94a3b8;
+      --gray-500:   #64748b;
+      --gray-700:   #334155;
+      --gray-900:   #0f172a;
+      --radius:     14px;
+      --shadow-sm:  0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-900);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(150deg, #064e3b 0%, #065f46 50%, #047857 100%);
+      color: #fff;
+      padding: 36px 40px 52px;
+      position: relative;
+      overflow: hidden;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 32px;
+      background: var(--gray-50);
+      clip-path: ellipse(55% 100% at 50% 100%);
+    }
+    .header-inner { max-width: 680px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    .header-left h1 { font-family: 'Oswald', sans-serif; font-size: 2rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+    .header-left p { opacity: .75; font-size: .9rem; margin-top: 4px; }
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.25);
+      color: #fff; text-decoration: none;
+      border-radius: 99px; padding: 7px 16px;
+      font-size: .82rem; font-weight: 500;
+      transition: background .15s;
+    }
+    .back-btn:hover { background: rgba(255,255,255,.25); }
+
+    .progress-section {
+      width: 80%; max-width: 680px;
+      margin: 32px auto 0;
+    }
+    .progress-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+    .progress-header .label { font-size: .85rem; font-weight: 600; color: var(--gray-700); }
+    .progress-header .count { font-size: 1.4rem; font-weight: 700; color: #065f46; }
+    .progress-bar-wrap { background: var(--gray-200); border-radius: 99px; height: 10px; overflow: hidden; }
+    .progress-bar-fill { height: 10px; border-radius: 99px; background: linear-gradient(90deg, #065f46, #16a34a); transition: width .4s ease; }
+    .progress-done { display: none; text-align: center; padding: 16px; background: var(--green-dim); border-radius: var(--radius); border: 1px solid #86efac; color: var(--green); font-weight: 600; font-size: .95rem; margin-top: 16px; }
+    .progress-done.visible { display: block; }
+
+    main { width: 80%; max-width: 680px; margin: 28px auto 72px; }
+
+    .toolbar { display: flex; justify-content: flex-end; margin-bottom: 20px; }
+    .btn-reset {
+      background: #fff; border: 1px solid var(--gray-200);
+      color: var(--gray-500); border-radius: 99px;
+      padding: 7px 18px; font-size: .8rem; font-weight: 600;
+      cursor: pointer; transition: all .15s;
+    }
+    .btn-reset:hover { border-color: var(--gray-400); color: var(--gray-700); }
+
+    .group { margin-bottom: 20px; background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
+    .group-header {
+      padding: 14px 20px;
+      background: var(--gray-50);
+      border-bottom: 1px solid var(--gray-200);
+      font-size: .72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .09em;
+      color: #065f46;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .group-count { margin-left: auto; font-size: .75rem; color: var(--gray-400); font-weight: 500; text-transform: none; letter-spacing: 0; }
+
+    .pack-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 13px 20px;
+      border-bottom: 1px solid var(--gray-100);
+      cursor: pointer; transition: background .12s;
+      user-select: none;
+    }
+    .pack-item:last-child { border-bottom: none; }
+    .pack-item:hover { background: var(--gray-50); }
+    .pack-item.checked { background: var(--green-dim); }
+    .pack-item.checked .item-label { color: var(--gray-400); text-decoration: line-through; }
+    .pack-item input[type="checkbox"] { display: none; }
+
+    .custom-check {
+      width: 22px; height: 22px; border-radius: 6px;
+      border: 2px solid #cbd5e1; background: #fff;
+      flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+      transition: all .15s;
+    }
+    .pack-item.checked .custom-check { background: var(--green); border-color: var(--green); }
+    .custom-check svg { display: none; }
+    .pack-item.checked .custom-check svg { display: block; }
+
+    .item-label { font-size: .9rem; color: var(--gray-700); flex: 1; }
+    .item-note { font-size: .76rem; color: var(--gray-400); margin-top: 1px; }
+
+    .item-warning .item-label { color: var(--amber); }
+    .item-warning .item-note { color: #b45309; }
+    .item-warning .custom-check { border-color: #fbbf24; }
+    .item-warning.checked .item-label { color: var(--gray-400); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-left">
+      <h1>🔧 Fahrrad-Check</h1>
+      <p>Vor Abfahrt — Bodensee Radtour · 17. Juni 2026</p>
+    </div>
+    <a href="index.html" class="back-btn">← Zurück zur Übersicht</a>
+  </div>
+</header>
+
+<div class="progress-section">
+  <div class="progress-header">
+    <span class="label">Erledigt</span>
+    <span class="count"><span id="done-count">0</span> / <span id="total-count">0</span></span>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progress-bar" style="width:0%"></div>
+  </div>
+  <div class="progress-done" id="all-done">Alles gecheckt — viel Spaß auf der Strecke! 🚴</div>
+</div>
+
+<main>
+  <div class="toolbar">
+    <button class="btn-reset" onclick="resetAll()">Alle zurücksetzen</button>
+  </div>
+  <div id="check-list"></div>
+</main>
+
+<script>
+  const GROUPS = [
+    {
+      title: '🔵 Reifen & Laufräder',
+      items: [
+        { id: 'reifendruck',  label: 'Reifendruck geprüft',           note: 'Gravelbike: ca. 3–5 bar je nach Reifenbreite' },
+        { id: 'reifen-zustand', label: 'Reifenzustand ok',            note: 'Keine Risse, Schnitte oder übermäßige Abnutzung' },
+        { id: 'ventil',       label: 'Ventile sitzen fest',            note: '' },
+      ]
+    },
+    {
+      title: '⛓ Antrieb',
+      items: [
+        { id: 'kette-oel',    label: 'Kette geölt',                   note: 'Frisch ölen, überschüssiges Öl abwischen' },
+        { id: 'kette-zustand', label: 'Kette nicht ausgelaugt',       note: 'Kein übermäßiges Spiel / Verschleiß' },
+        { id: 'schaltung',    label: 'Schaltung läuft sauber',        note: 'Alle Gänge einwandfrei — vorne & hinten' },
+        { id: 'kassette',     label: 'Kassette & Kettenblatt ok',     note: 'Keine Haifischzähne' },
+      ]
+    },
+    {
+      title: '🛑 Bremsen',
+      items: [
+        { id: 'bremsen-funktion', label: 'Bremswirkung ok',           note: 'Beide Hebel: Rad blockiert bevor Hebel am Lenker' },
+        { id: 'bremsbelaege', label: 'Bremsbeläge ausreichend',       note: 'Min. 1 mm Restdicke' },
+        { id: 'bremsscheiben', label: 'Bremsscheiben ok',             note: 'Nicht verbogen, keine Schleifgeräusche' },
+      ]
+    },
+    {
+      title: '🔩 Rahmen & Anbauteile',
+      items: [
+        { id: 'sattel',       label: 'Sattel & Sattelstütze fest',    note: 'Höhe & Neigung korrekt eingestellt' },
+        { id: 'lenker',       label: 'Lenker & Vorbau fest',          note: 'Kein Spiel' },
+        { id: 'pedale',       label: 'Pedale fest',                   note: '' },
+        { id: 'schnellspanner', label: 'Schnellspanner geschlossen',  note: 'Vorder- & Hinterrad' },
+      ]
+    },
+    {
+      title: '💡 Elektronik & Navigation',
+      items: [
+        { id: 'garmin-laden', label: 'Garmin Edge geladen',           note: 'Vollständig laden — reicht für ~15 h' },
+        { id: 'garmin-tour',  label: 'Komoot-Tour auf Garmin geladen', note: 'GPX-Export aus Komoot' },
+        { id: 'pumpe-laden',  label: 'Elektrische Pumpe geladen',     note: 'Peakspek AS250PRO' },
+        { id: 'powerbank-laden', label: 'Powerbank geladen',          note: '' },
+        { id: 'handy-laden',  label: 'Handy geladen',                 note: 'Roaming Zone 2 aktiv?' },
+        { id: 'licht',        label: 'Beleuchtung funktioniert',      note: 'Vorne & hinten — Pflicht bei Dämmerung' },
+      ]
+    },
+    {
+      title: '🎒 Gepäck & Befestigung',
+      items: [
+        { id: 'seatpack-fest', label: 'Seat-Pack sicher befestigt',   note: 'Kein Wackeln, Riemen fest' },
+        { id: 'framebag-fest', label: 'Rahmentasche sitzt fest',      note: '' },
+        { id: 'satteltasche-fest', label: 'Kleine Satteltasche fest', note: 'Schloss & Schlüssel drin?' },
+        { id: 'gepäck-balance', label: 'Gepäck gleichmäßig verteilt', note: 'Schweres nach unten & zur Mitte' },
+      ]
+    },
+    {
+      title: '🧴 Körper & Startbereit',
+      items: [
+        { id: 'chamois',      label: 'Chamois-Creme aufgetragen',     note: 'Vor jeder Etappe — nicht vergessen!' },
+        { id: 'sonnenschutz-on', label: 'Sonnenschutz aufgetragen',   note: 'Auch Arme, Nacken, Ohren' },
+        { id: 'wasser-voll',  label: 'Trinkflaschen gefüllt',         note: 'Beide Flaschen voll starten' },
+        { id: 'snacks-dabei', label: 'Snacks griffbereit',            note: 'In Rahmentasche — alle 30–40 km essen' },
+        { id: 'helm-auf',     label: 'Helm auf',                      note: '😄' },
+      ]
+    },
+  ];
+
+  const KEY = 'bodensee-bikecheck-v1';
+
+  function getState() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; }
+  }
+  function saveState(state) { localStorage.setItem(KEY, JSON.stringify(state)); }
+
+  function updateProgress() {
+    const all = document.querySelectorAll('.pack-item');
+    const total = all.length;
+    const done = [...all].filter(el => el.classList.contains('checked')).length;
+    document.getElementById('done-count').textContent = done;
+    document.getElementById('total-count').textContent = total;
+    document.getElementById('progress-bar').style.width = total ? (done / total * 100) + '%' : '0%';
+    document.getElementById('all-done').classList.toggle('visible', done === total && total > 0);
+    document.querySelectorAll('.group').forEach(group => {
+      const items = group.querySelectorAll('.pack-item');
+      const checkedCount = [...items].filter(i => i.classList.contains('checked')).length;
+      group.querySelector('.group-count').textContent = `${checkedCount} / ${items.length}`;
+    });
+  }
+
+  function toggle(el, id) {
+    const state = getState();
+    const checked = !el.classList.contains('checked');
+    el.classList.toggle('checked', checked);
+    state[id] = checked;
+    saveState(state);
+    updateProgress();
+  }
+
+  function resetAll() {
+    if (!confirm('Alle Haken entfernen?')) return;
+    saveState({});
+    document.querySelectorAll('.pack-item').forEach(el => el.classList.remove('checked'));
+    updateProgress();
+  }
+
+  function render() {
+    const state = getState();
+    const list = document.getElementById('check-list');
+    list.innerHTML = '';
+
+    GROUPS.forEach(group => {
+      const groupEl = document.createElement('div');
+      groupEl.className = 'group';
+
+      const header = document.createElement('div');
+      header.className = 'group-header';
+      header.innerHTML = `${group.title}<span class="group-count"></span>`;
+      groupEl.appendChild(header);
+
+      group.items.forEach(item => {
+        const row = document.createElement('label');
+        row.className = 'pack-item' + (state[item.id] ? ' checked' : '') + (item.warning ? ' item-warning' : '');
+        row.innerHTML = `
+          <input type="checkbox" ${state[item.id] ? 'checked' : ''} />
+          <div class="custom-check">
+            <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
+              <path d="M1 5l3.5 3.5L11 1" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div>
+            <div class="item-label">${item.label}</div>
+            ${item.note ? `<div class="item-note">${item.note}</div>` : ''}
+          </div>
+        `;
+        row.addEventListener('click', () => toggle(row, item.id));
+        groupEl.appendChild(row);
+      });
+
+      list.appendChild(groupEl);
+    });
+
+    updateProgress();
+    localStorage.setItem(KEY + '-total', document.querySelectorAll('.pack-item').length);
+  }
+
+  render();
+</script>
+</body>
+</html>

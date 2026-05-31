@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bodensee Radtour — Juni 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent:      #2563eb;
+      --accent-dim:  #eff6ff;
+      --green:       #16a34a;
+      --green-dim:   #f0fdf4;
+      --amber:       #d97706;
+      --amber-dim:   #fffbeb;
+      --red:         #dc2626;
+      --red-dim:     #fef2f2;
+      --gray-50:     #f8fafc;
+      --gray-100:    #f1f5f9;
+      --gray-200:    #e2e8f0;
+      --gray-400:    #94a3b8;
+      --gray-500:    #64748b;
+      --gray-700:    #334155;
+      --gray-900:    #0f172a;
+      --radius:      14px;
+      --radius-sm:   8px;
+      --shadow-sm:   0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+      --shadow:      0 4px 16px rgba(0,0,0,.07);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-900);
+      line-height: 1.6;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: linear-gradient(150deg, #1e40af 0%, #1d4ed8 45%, #0369a1 100%);
+      color: #fff;
+      padding: 56px 40px 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 40px;
+      background: var(--gray-50);
+      clip-path: ellipse(55% 100% at 50% 100%);
+    }
+    header .emoji { font-size: 3.2rem; margin-bottom: 14px; display: block; filter: drop-shadow(0 2px 8px rgba(0,0,0,.2)); }
+    header h1 { font-family: 'Oswald', sans-serif; font-size: 3.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+    header .subtitle { opacity: .75; font-size: 1rem; font-weight: 400; }
+    .badge-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 22px; margin-bottom: 18px; }
+    .badge {
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 99px;
+      padding: 5px 16px;
+      font-size: .8rem;
+      font-weight: 500;
+      letter-spacing: .01em;
+    }
+
+    /* ── LAYOUT ── */
+    main {
+      width: 80%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 44px 0 72px;
+    }
+
+    /* ── SECTION ── */
+    .section { margin-bottom: 36px; }
+    .section-title {
+      display: flex; align-items: center; gap: 9px;
+      font-size: 1rem; font-weight: 600;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-bottom: 18px;
+    }
+    .section-title .icon { font-size: 1rem; }
+
+    /* ── CARDS ── */
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+    .card {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-200);
+      transition: box-shadow .15s ease, transform .15s ease;
+    }
+    .card:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
+    .card h3 {
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      color: var(--gray-400);
+      margin-bottom: 7px;
+      font-weight: 600;
+    }
+    .card .value { font-size: 1.1rem; font-weight: 700; color: var(--gray-900); line-height: 1.3; }
+    .card .note { font-size: .8rem; color: var(--gray-500); margin-top: 5px; line-height: 1.5; }
+
+    /* ── ROUTE TABLE ── */
+    .table-wrap {
+      background: #fff;
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+    .route-table { width: 100%; border-collapse: collapse; }
+    .route-table th {
+      background: var(--gray-50);
+      color: var(--gray-500);
+      padding: 11px 18px;
+      text-align: left;
+      font-size: .72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .route-table td {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--gray-100);
+      font-size: .9rem;
+      color: var(--gray-700);
+      vertical-align: top;
+    }
+    .route-table tr:last-child td { border-bottom: none; }
+    .route-table tbody tr:hover td { background: var(--gray-50); }
+    .route-table td strong { color: var(--gray-900); font-weight: 600; }
+
+    /* row tints */
+    .row-blue  td { background: #f0f7ff; }
+    .row-green td { background: #f0fdf4; }
+    .row-amber td { background: #fffdf0; }
+    .row-blue:hover  td { background: #e4f0ff !important; }
+    .row-green:hover td { background: #e4faf0 !important; }
+    .row-amber:hover td { background: #fff9e0 !important; }
+
+    /* ── CHECKLIST ── */
+    .checklist {
+      background: #fff;
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+    .checklist-group { padding: 18px 24px; border-bottom: 1px solid var(--gray-100); }
+    .checklist-group:last-child { border-bottom: none; }
+    .checklist-group h4 {
+      font-size: .72rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      margin-bottom: 12px;
+    }
+    .checklist-cols { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 2px; }
+    .checklist-item { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: .88rem; color: var(--gray-700); }
+    .checklist-item .status { font-size: .85rem; min-width: 16px; }
+    .status-ok   { color: var(--green); }
+    .status-todo { color: var(--amber); }
+    .status-miss { color: var(--gray-400); }
+
+    /* ── OPEN QUESTIONS ── */
+    .questions {
+      background: #fff;
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+    .questions p {
+      font-size: .9rem;
+      color: var(--gray-700);
+      padding: 13px 24px;
+      border-bottom: 1px solid var(--gray-100);
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .questions p:last-child { border-bottom: none; }
+    .questions p::before { content: '·'; color: var(--gray-400); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+    /* ── STATUS PILL ── */
+    .pill {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-size: .7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      white-space: nowrap;
+    }
+    .pill.planning { background: var(--amber-dim);  color: var(--amber); }
+    .pill.done     { background: var(--green-dim);  color: var(--green); }
+    .pill.open     { background: var(--gray-100);   color: var(--gray-500); }
+
+    footer {
+      text-align: center;
+      color: var(--gray-400);
+      font-size: .78rem;
+      padding: 28px 20px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <span class="emoji">🚴</span>
+  <h1>Bodensee Radtour</h1>
+
+</header>
+
+<main>
+
+  <!-- ECKDATEN -->
+  <section class="section">
+    <div class="section-title"><span class="icon">📋</span> Eckdaten</div>
+    <div class="card-grid">
+      <div class="card">
+        <h3>Anreise</h3>
+        <div class="value">Mo, 16. Juni</div>
+        <div class="note">Heilbronn → Konstanz · ~1,5 h</div>
+      </div>
+      <div class="card">
+        <h3>Tour</h3>
+        <div class="value">Di 17. – Mi/Do 18./19. Juni</div>
+        <div class="note">2 Etappen · ggf. 3 bei Puffertag</div>
+      </div>
+      <div class="card">
+        <h3>Abreise</h3>
+        <div class="value">Do/Fr, 19./20. Juni</div>
+        <div class="note">Konstanz → Heilbronn · ~1,5 h</div>
+      </div>
+      <div class="card">
+        <h3>Gesamtstrecke</h3>
+        <div class="value">263 km</div>
+        <div class="note">Komoot-Tour · 4★ ADFC-zertifiziert</div>
+      </div>
+      <div class="card">
+        <h3>Höhenmeter</h3>
+        <div class="value">1.120 m ↑↓</div>
+        <div class="note">~560 m pro Etappe</div>
+      </div>
+      <div class="card">
+        <h3>Fahrzeit gesamt</h3>
+        <div class="value">~15 h 30 min</div>
+        <div class="note">Bei Ø 17 km/h · exkl. Pausen</div>
+      </div>
+      <div class="card">
+        <h3>Anreise</h3>
+        <div class="value">Heilbronn → Konstanz</div>
+        <div class="note">~130 km · ca. 1,5 h · A81/A98</div>
+      </div>
+      <div class="card">
+        <h3>Fahrrad</h3>
+        <div class="value">Gravelbike</div>
+        <div class="note">Guter Zustand — ideal für den Radweg</div>
+      </div>
+      <div class="card">
+        <h3>Startpunkt</h3>
+        <div class="value">Konstanz</div>
+        <div class="note">Parkhaus Döbele oder Parkhaus am Bahnhof</div>
+      </div>
+      <div class="card">
+        <h3>Untergrund</h3>
+        <div class="value">90 % Asphalt</div>
+        <div class="note">237 km Asphalt · 16,5 km Schotter · 5,8 km unbefestigt</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROUTE -->
+  <section class="section">
+    <div class="section-title" style="justify-content:space-between;">
+      <span style="display:flex;align-items:center;gap:9px;"><span class="icon">🗺</span> Routenplanung — Uhrzeigersinn ab Konstanz</span>
+      <a href="https://www.komoot.com/tour/910825481" target="_blank" rel="noopener" style="
+        display:inline-flex;align-items:center;gap:7px;
+        background:#6bab3d;color:#fff;text-decoration:none;
+        border-radius:99px;padding:6px 16px;
+        font-size:.78rem;font-weight:600;letter-spacing:.01em;
+        white-space:nowrap;flex-shrink:0;
+        box-shadow:0 2px 8px rgba(107,171,61,.3);
+        transition:opacity .15s;
+      " onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        Auf Komoot ansehen
+      </a>
+    </div>
+    <div class="table-wrap">
+      <table class="route-table">
+        <thead>
+          <tr>
+            <th>Tag</th>
+            <th>Datum</th>
+            <th>Von → Nach</th>
+            <th>km</th>
+            <th>Highlights unterwegs</th>
+            <th>Übernachtung</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Anreise</strong></td>
+            <td>Mo, 16.06</td>
+            <td>Heilbronn → Konstanz</td>
+            <td>~130 (Auto)</td>
+            <td>Ankommen, Fahrrad aufbauen, Abend in Konstanz</td>
+            <td>Hotel Konstanz</td>
+            <td><span class="pill open">Offen</span></td>
+          </tr>
+          <tr class="row-blue">
+            <td><strong>Etappe 1</strong></td>
+            <td>Di, 17.06</td>
+            <td>Konstanz → Bregenz / Lindau</td>
+            <td><strong>~120 km</strong></td>
+            <td>km 57 Basilika Birnau · km 60 Pfahlbaumuseum Unteruhldingen · km 93 Schloss Montfort · km 117 Badehaus Kaiserstrand</td>
+            <td>Hotel Lindau oder Bregenz</td>
+            <td><span class="pill open">Offen</span></td>
+          </tr>
+          <tr class="row-green">
+            <td><strong>Etappe 2</strong></td>
+            <td>Mi, 18.06</td>
+            <td>Bregenz / Lindau → Konstanz</td>
+            <td><strong>~143 km</strong></td>
+            <td>km 153 Tiki-Strandbar Goldach CH · km 185 Marina Bottighofen · km 217 Rheinbrücke Stein am Rhein · ⚠️ km 195 & 242 Absteigepflicht</td>
+            <td>— (zurück zum Auto)</td>
+            <td><span class="pill open">Offen</span></td>
+          </tr>
+          <tr class="row-amber">
+            <td><strong>Puffer (opt.)</strong></td>
+            <td>Do, 19.06</td>
+            <td>Etappe 2 splitten</td>
+            <td>~70–80 km</td>
+            <td>Rorschach CH als Übernachtung, Rest am Folgetag</td>
+            <td>Spontan CH / Vorarlberg</td>
+            <td><span class="pill planning">Optional</span></td>
+          </tr>
+          <tr>
+            <td><strong>Rückreise</strong></td>
+            <td>Do/Fr, 19./20.06</td>
+            <td>Konstanz → Heilbronn</td>
+            <td>~130 (Auto)</td>
+            <td>—</td>
+            <td>—</td>
+            <td><span class="pill open">Offen</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- HIGHLIGHTS KARTE -->
+  <section class="section">
+    <div class="section-title"><span class="icon">⭐</span> Highlights entlang der Route</div>
+    <div class="card-grid">
+      <div class="card">
+        <h3>km 57 · Etappe 1</h3>
+        <div class="value">Basilika Birnau</div>
+        <div class="note">Aussichtspunkt mit Blick auf den Bodensee zwischen Weinbergen</div>
+      </div>
+      <div class="card">
+        <h3>km 60 · Etappe 1</h3>
+        <div class="value">Pfahlbaumuseum Unteruhldingen</div>
+        <div class="note">UNESCO-Weltkulturerbe — Pfahlbauten im See</div>
+      </div>
+      <div class="card">
+        <h3>km 93 · Etappe 1</h3>
+        <div class="value">Schloss Montfort</div>
+        <div class="note">Burgruine mit Seeblick (Langenargen)</div>
+      </div>
+      <div class="card">
+        <h3>km 117 · Etappe 1</h3>
+        <div class="value">Badehaus Am Kaiserstrand</div>
+        <div class="note">Strandbad in Österreich — perfekte Erfrischung</div>
+      </div>
+      <div class="card">
+        <h3>km 153 · Etappe 2</h3>
+        <div class="value">Tiki-Strandbar Goldach</div>
+        <div class="note">Café/Bar am Hafen in der Schweiz</div>
+      </div>
+      <div class="card">
+        <h3>km 185 · Etappe 2</h3>
+        <div class="value">Marina Bottighofen</div>
+        <div class="note">Aussichtspunkt Richtung Konstanz (CH)</div>
+      </div>
+      <div class="card">
+        <h3>km 217 · Etappe 2</h3>
+        <div class="value">Rheinbrücke Stein am Rhein</div>
+        <div class="note">Historische Brücke — letztes großes Highlight vor Konstanz</div>
+      </div>
+      <div class="card" style="border-color:#fecaca;">
+        <h3>km 195 & 242 · Achtung</h3>
+        <div class="value" style="color:var(--red);">Absteigepflicht</div>
+        <div class="note">Radfahren nicht erlaubt — Fahrrad schieben</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ÜBERNACHTUNGEN -->
+  <section class="section">
+    <div class="section-title"><span class="icon">🏨</span> Übernachtungsplanung</div>
+
+    <p style="font-size:.88rem;color:var(--gray-500);margin-bottom:20px;">Hotels werden spontan vor Ort gebucht. Unten sind die geplanten Übernachtungsorte je nach gewählter Variante — beim Suchen auf <strong>Fahrrad-Abstellmöglichkeit</strong> und <strong>Frühstück inklusive</strong> achten.</p>
+
+    <div style="font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:10px;">Plan A — 2 Radtage (je ~130 km) · Anreise Mo 16.06 in Konstanz</div>
+    <div class="table-wrap" style="margin-bottom:24px;">
+      <table class="route-table">
+        <thead>
+          <tr>
+            <th>Tag</th>
+            <th>Datum</th>
+            <th>Strecke</th>
+            <th>km / Etappe</th>
+            <th>Übernachtung</th>
+            <th>Hinweis</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Anreise</strong></td>
+            <td>Mo, 16.06</td>
+            <td>Heilbronn → Konstanz</td>
+            <td>— (Auto)</td>
+            <td><strong>Konstanz</strong></td>
+            <td>Startpunkt · Auto parken · Abend erkunden</td>
+          </tr>
+          <tr class="row-blue">
+            <td><strong>Etappe 1</strong></td>
+            <td>Di, 17.06</td>
+            <td>Konstanz → Lindau / Bregenz</td>
+            <td>~120 km</td>
+            <td><strong>Lindau oder Bregenz</strong></td>
+            <td>Schöne Lage am See · viele Hotels</td>
+          </tr>
+          <tr class="row-blue">
+            <td><strong>Etappe 2</strong></td>
+            <td>Mi, 18.06</td>
+            <td>Lindau / Bregenz → Konstanz</td>
+            <td>~143 km</td>
+            <td>— (zurück zum Auto)</td>
+            <td>Tour abgeschlossen</td>
+          </tr>
+          <tr>
+            <td><strong>Abreise</strong></td>
+            <td>Mi/Do, 18./19.06</td>
+            <td>Konstanz → Heilbronn</td>
+            <td>— (Auto)</td>
+            <td>— Zuhause</td>
+            <td>~130 km · ca. 1,5 h</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--green);margin-bottom:10px;">Plan B — 3 Radtage (je ~88 km) · Anreise Mo 16.06 in Konstanz</div>
+    <div class="table-wrap" style="margin-bottom:14px;">
+      <table class="route-table">
+        <thead>
+          <tr>
+            <th>Tag</th>
+            <th>Datum</th>
+            <th>Strecke</th>
+            <th>km / Etappe</th>
+            <th>Übernachtung</th>
+            <th>Hinweis</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Anreise</strong></td>
+            <td>Mo, 16.06</td>
+            <td>Heilbronn → Konstanz</td>
+            <td>— (Auto)</td>
+            <td><strong>Konstanz</strong></td>
+            <td>Startpunkt · Auto parken · Abend erkunden</td>
+          </tr>
+          <tr class="row-green">
+            <td><strong>Etappe 1</strong></td>
+            <td>Di, 17.06</td>
+            <td>Konstanz → Friedrichshafen</td>
+            <td>~88 km</td>
+            <td><strong>Friedrichshafen</strong></td>
+            <td>Größte Stadt am Nordufer · viele Hotels · Zeppelin-Museum</td>
+          </tr>
+          <tr class="row-green">
+            <td><strong>Etappe 2</strong></td>
+            <td>Mi, 18.06</td>
+            <td>Friedrichshafen → Rorschach (CH)</td>
+            <td>~87 km</td>
+            <td><strong>Rorschach (CH)</strong></td>
+            <td>Schöner Schweizer Seeort · ruhig · direkt am See</td>
+          </tr>
+          <tr class="row-green">
+            <td><strong>Etappe 3</strong></td>
+            <td>Do, 19.06</td>
+            <td>Rorschach → Konstanz</td>
+            <td>~88 km</td>
+            <td>— (zurück zum Auto)</td>
+            <td>Tour abgeschlossen</td>
+          </tr>
+          <tr>
+            <td><strong>Abreise</strong></td>
+            <td>Do/Fr, 19./20.06</td>
+            <td>Konstanz → Heilbronn</td>
+            <td>— (Auto)</td>
+            <td>— Zuhause</td>
+            <td>~130 km · ca. 1,5 h</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);padding:14px 20px;box-shadow:var(--shadow-sm);font-size:.85rem;color:var(--gray-600);display:flex;gap:10px;align-items:flex-start;">
+      <span style="flex-shrink:0;">💡</span>
+      <span>Beim Buchen auf Booking.com Filter <strong>"Fahrrad-Abstellmöglichkeit"</strong> setzen. Frühstück inkludiert ist bei einem 130 km-Tag Gold wert. Check-in in der Regel ab 15–16 Uhr möglich — bei Ankunft ~18–19 Uhr kein Problem.</span>
+    </div>
+  </section>
+
+  <!-- PARKPLATZ & ANREISE -->
+  <section class="section">
+    <div class="section-title"><span class="icon">🚗</span> Anreise & Parkplatz</div>
+    <div class="table-wrap">
+      <table class="route-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Parkhaus</th>
+            <th>Adresse</th>
+            <th>Preis / Tag</th>
+            <th>4 Tage</th>
+            <th>Überdacht</th>
+            <th>Hinweis</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="row-green">
+            <td>⭐</td>
+            <td><strong>Europabrücke</strong></td>
+            <td>Reichenaustr. 70</td>
+            <td><strong>~14 €</strong></td>
+            <td>~56 €</td>
+            <td>✓</td>
+            <td>Direkt am Radweg · 124 Fahrradplätze · E-Bike laden</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>Altstadt</td>
+            <td>Untere Laube 26</td>
+            <td>~18 €</td>
+            <td>~72 €</td>
+            <td>✓</td>
+            <td>Top-zentral · 200 m zur Altstadt · Einfahrt ab 06:30</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>Lago</td>
+            <td>Hafenstr. 31</td>
+            <td>~18 €</td>
+            <td>~72 €</td>
+            <td>✓</td>
+            <td>Am Seerhein · Einfahrthöhe max. 1,90 m beachten</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);padding:16px 20px;margin-top:14px;box-shadow:var(--shadow-sm);font-size:.88rem;color:var(--gray-600);">
+      ℹ️ <strong>Hinweis:</strong> Parkhaus Döbele ist nicht überdacht und kostet ~25 €/Tag — nicht empfohlen. Tiefgarage Augustiner ist bis Herbst 2026 wegen Sanierung geschlossen.
+    </div>
+  </section>
+
+  <!-- AUSRÜSTUNG -->
+  <section class="section">
+    <div class="section-title"><span class="icon">🎒</span> Ausrüstung & Packliste</div>
+    <div class="checklist">
+      <div class="checklist-group">
+        <h4>Fahrrad & Technik</h4>
+        <div class="checklist-cols">
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Garmin Edge — GPS-Navigation</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Kleine Satteltasche (Schloss, Schlüssel)</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Powerbank</span></div>
+          <div class="checklist-item"><span class="status status-miss">○</span><span>Gepäcklösung für Kleidung (Seat-Pack empfohlen)</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Ersatzschläuche — Schwalbe SV17 2er Set</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Reifenheber — im Flickset enthalten</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Flickset — 18 Patches, Rubber Solution, Metal File</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Mini-Pumpe — Peakspek AS250PRO (elektrisch)</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Multitool</span></div>
+          <div class="checklist-item"><span class="status status-miss">○</span><span>Kettenschloss (Quick Link) — noch offen</span></div>
+          <div class="checklist-item"><span class="status status-todo">!</span><span>CO2-Kartuschen (2×) — Backup zur elektr. Pumpe empfohlen</span></div>
+        </div>
+      </div>
+      <div class="checklist-group">
+        <h4>Kleidung & Körper</h4>
+        <div class="checklist-cols">
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Helm</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Fahrradhose mit Sitzpolster</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Fahrradtrikot</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Handschuhe</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Regenjacke</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Sonnenbrille</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Clickschuhe (fürs Rad)</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>2× T-Shirt (Freizeit)</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>1× Hose (Freizeit)</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Unterwäsche (2×)</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Socken — 2× Radsocken, 1× Freizeit</span></div>
+          <div class="checklist-item"><span class="status status-miss">○</span><span>Schuhe für abends (Flip-Flops oder Sneaker)</span></div>
+          <div class="checklist-item"><span class="status status-miss">○</span><span>Chamois-Creme</span></div>
+        </div>
+      </div>
+      <div class="checklist-group">
+        <h4>Kulturbeutel & Hygiene</h4>
+        <div class="checklist-cols">
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Kulturbeutel</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Zahnbürste</span></div>
+          <div class="checklist-item"><span class="status status-miss">○</span><span>Zahnpasta (Reisegröße)</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Duschgel & Shampoo</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Deo</span></div>
+        </div>
+      </div>
+      <div class="checklist-group">
+        <h4>Verpflegung & Gesundheit</h4>
+        <div class="checklist-cols">
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Trinkflaschen</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Energy Gels + 1–2 Riegel (Rest spontan kaufen)</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Sonnenschutz LSF 50+</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Schmerzmittel / Ibuprofen</span></div>
+          <div class="checklist-item"><span class="status status-miss">○</span><span>Blasenpflaster (Compeed)</span></div>
+          <div class="checklist-item"><span class="status status-miss">○</span><span>Pflasterset (Wundpflaster, Schürfwunden)</span></div>
+          <div class="checklist-item"><span class="status status-miss">○</span><span>Lippenpflege LSF — Sonne + Wind vergessen</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Mückenspray</span></div>
+        </div>
+      </div>
+      <div class="checklist-group">
+        <h4>Notfall & Kleinteile</h4>
+        <div class="checklist-cols">
+          <div class="checklist-item"><span class="status status-miss">○</span><span>Kabelbinder (3–4 Stück)</span></div>
+          <div class="checklist-item"><span class="status status-miss">○</span><span>Duct Tape (kleines Stück)</span></div>
+        </div>
+      </div>
+      <div class="checklist-group">
+        <h4>Dokumente & Zahlungsmittel</h4>
+        <div class="checklist-cols">
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Personalausweis — gültig</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>BKK Krankenkassenkarte (inkl. EHIC Rückseite)</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>ING Karte — kostenlos CHF abheben in CH</span></div>
+          <div class="checklist-item"><span class="status status-miss">○</span><span>Freenet Zone 2 Paket buchen — CH nicht im Standard-Roaming</span></div>
+          <div class="checklist-item"><span class="status status-miss">○</span><span>Etwas Bargeld EUR einpacken (AT & DE)</span></div>
+          <div class="checklist-item"><span class="status status-todo">!</span><span>CHF unterwegs abheben — ING kostenlos an jedem Schweizer Automaten</span></div>
+        </div>
+      </div>
+      <div class="checklist-group">
+        <h4>Elektronik & Kabel</h4>
+        <div class="checklist-cols">
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Powerbank</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Kopfhörer (USB-C)</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>USB-C Kabel (1× für Handy, Garmin, Pumpe, Kopfhörer)</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>Apple Watch Ladekabel</span></div>
+          <div class="checklist-item"><span class="status status-ok">✓</span><span>USB-C Netzteil (Stecker)</span></div>
+        </div>
+      </div>
+      <div class="checklist-group">
+        <h4>Logistik & Unterkunft</h4>
+        <div class="checklist-cols">
+          <div class="checklist-item"><span class="status status-miss">○</span><span>Parkplatz Konstanz (langzeittauglich) buchen</span></div>
+          <div class="checklist-item"><span class="status status-miss">○</span><span>Hotel / Pension Nacht 1 vorplanen (Lindau / Bregenz)</span></div>
+          <div class="checklist-item"><span class="status status-miss">○</span><span>Hotel / Pension Nacht 2 vorplanen (Konstanz)</span></div>
+          <div class="checklist-item"><span class="status status-miss">○</span><span>Komoot-Tour auf Garmin laden</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EINKAUFSLISTE -->
+  <section class="section">
+    <div class="section-title"><span class="icon">🛒</span> Einkaufsliste — noch zu besorgen</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+      <span style="display:flex;align-items:center;gap:7px;font-size:.82rem;color:var(--gray-500);">
+        <span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#dbeafe;border:1px solid #93c5fd;flex-shrink:0;"></span> Gepäck
+      </span>
+      <span style="display:flex;align-items:center;gap:7px;font-size:.82rem;color:var(--gray-500);">
+        <span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#dcfce7;border:1px solid #86efac;flex-shrink:0;"></span> Reparatur
+      </span>
+      <span style="display:flex;align-items:center;gap:7px;font-size:.82rem;color:var(--gray-500);">
+        <span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#fef9c3;border:1px solid #fde047;flex-shrink:0;"></span> Körper
+      </span>
+      <span style="display:flex;align-items:center;gap:7px;font-size:.82rem;color:var(--gray-500);">
+        <span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#dbeafe;border:1px solid #93c5fd;flex-shrink:0;"></span> Elektronik / Gepäck
+      </span>
+    </div>
+    <div class="table-wrap">
+      <table class="route-table">
+        <thead>
+          <tr>
+            <th>Kategorie</th>
+            <th>Artikel</th>
+            <th>Empfehlung / Hinweis</th>
+            <th>ca. Preis</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="row-blue">
+            <td><strong>Gepäck</strong></td>
+            <td>Satteltasche groß (Seat-Pack)</td>
+            <td>Ortlieb Seat-Pack 11 L — wasserdicht, passt an jeden Sattel, 2 Tage Kleidung</td>
+            <td>~80 €</td>
+          </tr>
+          <tr class="row-blue">
+            <td><strong>Gepäck</strong></td>
+            <td>Rahmentasche — Rovativ 2.2L</td>
+            <td>Bereits vorgemerkt ✓ — gut für Snacks, Handy, Dokumente</td>
+            <td>vorgemerkt</td>
+          </tr>
+          <tr class="row-green">
+            <td><strong>Reparatur</strong></td>
+            <td>Schwalbe SV17 700C 28" (2×)</td>
+            <td>Bereits vorgemerkt ✓</td>
+            <td>vorgemerkt</td>
+          </tr>
+          <tr class="row-green">
+            <td><strong>Reparatur</strong></td>
+            <td>Peakspek AS250PRO Pumpe</td>
+            <td>Bereits vorgemerkt ✓ — Akku vor Abfahrt laden!</td>
+            <td>vorgemerkt</td>
+          </tr>
+          <tr class="row-green">
+            <td><strong>Reparatur</strong></td>
+            <td>Flickset (18 Patches, Tyre Lever …)</td>
+            <td>Bereits vorgemerkt ✓</td>
+            <td>vorgemerkt</td>
+          </tr>
+          <tr class="row-green">
+            <td><strong>Reparatur</strong></td>
+            <td>Kettenschloss (Quick Link)</td>
+            <td>Passend zur Kettengröße (11- oder 12-fach) — 2× mitnehmen</td>
+            <td>~5 €</td>
+          </tr>
+          <tr class="row-green">
+            <td><strong>Reparatur</strong></td>
+            <td>CO2-Kartuschen (2×)</td>
+            <td>Backup zur elektr. Pumpe — wiegen nichts, für Notfall empfohlen</td>
+            <td>~8 €</td>
+          </tr>
+          <tr class="row-blue">
+            <td><strong>Vorbereitung</strong></td>
+            <td>Freenet Zone 2 Paket buchen</td>
+            <td>CH ist kein EU-Land — vor Abfahrt in der Freenet App buchen</td>
+            <td>je nach Tarif</td>
+          </tr>
+          <tr class="row-amber">
+            <td><strong>Hygiene</strong></td>
+            <td>Zahnpasta (Reisegröße)</td>
+            <td>z.B. Colgate Mini — passt in jeden Kulturbeutel</td>
+            <td>~2 €</td>
+          </tr>
+          <tr class="row-amber">
+            <td><strong>Körper</strong></td>
+            <td>Chamois-Creme</td>
+            <td>Assos Chamois Crème oder Sportique — bei 130 km/Tag Pflicht</td>
+            <td>~15 €</td>
+          </tr>
+          <tr class="row-amber">
+            <td><strong>Körper</strong></td>
+            <td>Blasenpflaster (Compeed)</td>
+            <td>Klein, leicht, rettet den Tag bei Druckstellen</td>
+            <td>~6 €</td>
+          </tr>
+          <tr class="row-amber">
+            <td><strong>Körper</strong></td>
+            <td>Pflasterset</td>
+            <td>Kleines Sortiment für Schürfwunden — Apotheke oder DM</td>
+            <td>~3 €</td>
+          </tr>
+          <tr class="row-amber">
+            <td><strong>Körper</strong></td>
+            <td>Lippenpflege LSF</td>
+            <td>Labello Sun oder ähnlich — wird fast immer vergessen</td>
+            <td>~3 €</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- CHECKLISTEN -->
+  <section class="section">
+    <div class="section-title"><span class="icon">✅</span> Checklisten</div>
+    <div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr));">
+
+      <a href="bike-check.html" style="text-decoration:none;">
+        <div class="card" data-ls-key="bodensee-bikecheck-v1" style="border:1px solid #a7f3d0;cursor:pointer;transition:box-shadow .15s,transform .15s;"
+          onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(6,95,70,.12)'"
+          onmouseout="this.style.transform='';this.style.boxShadow=''">
+          <div style="font-size:2rem;margin-bottom:10px;">🔧</div>
+          <h3>Fahrrad-Check</h3>
+          <div class="value" style="font-size:1rem;">Vor Abfahrt</div>
+          <div class="note" style="margin-top:8px;">Reifen, Bremsen, Schaltung, Kette, Gepäck & mehr</div>
+          <div style="margin-top:14px;display:flex;align-items:center;gap:10px;">
+            <div style="flex:1;background:var(--gray-100);border-radius:99px;height:5px;overflow:hidden;">
+              <div class="cl-bar" style="height:5px;border-radius:99px;background:#16a34a;width:0%;transition:width .4s;"></div>
+            </div>
+            <span class="cl-count" style="font-size:.75rem;font-weight:600;color:var(--gray-400);white-space:nowrap;">— / —</span>
+          </div>
+          <div style="margin-top:10px;">
+            <span style="display:inline-block;background:#f0fdf4;color:#16a34a;border-radius:99px;padding:4px 12px;font-size:.75rem;font-weight:600;">Tag 1 & Tag 2</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="nav-check.html" style="text-decoration:none;">
+        <div class="card" data-ls-key="bodensee-navcheck-v1" style="border:1px solid #ddd6fe;cursor:pointer;transition:box-shadow .15s,transform .15s;"
+          onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(124,58,237,.12)'"
+          onmouseout="this.style.transform='';this.style.boxShadow=''">
+          <div style="font-size:2rem;margin-bottom:10px;">🗺</div>
+          <h3>Navigation & Apps</h3>
+          <div class="value" style="font-size:1rem;">Vor dem Trip einrichten</div>
+          <div class="note" style="margin-top:8px;">Komoot auf Garmin laden, Offline-Karten, Wetter, Notfallkontakte</div>
+          <div style="margin-top:14px;display:flex;align-items:center;gap:10px;">
+            <div style="flex:1;background:var(--gray-100);border-radius:99px;height:5px;overflow:hidden;">
+              <div class="cl-bar" style="height:5px;border-radius:99px;background:#7c3aed;width:0%;transition:width .4s;"></div>
+            </div>
+            <span class="cl-count" style="font-size:.75rem;font-weight:600;color:var(--gray-400);white-space:nowrap;">— / —</span>
+          </div>
+          <div style="margin-top:10px;">
+            <span style="display:inline-block;background:#f5f3ff;color:#7c3aed;border-radius:99px;padding:4px 12px;font-size:.75rem;font-weight:600;">1–2 Tage vorher</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="pack.html" style="text-decoration:none;">
+        <div class="card" data-ls-key="bodensee-pack-v1" style="border:1px solid #bfdbfe;cursor:pointer;transition:box-shadow .15s,transform .15s;"
+          onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(37,99,235,.15)'"
+          onmouseout="this.style.transform='';this.style.boxShadow=''">
+          <div style="font-size:2rem;margin-bottom:10px;">🎒</div>
+          <h3>Packliste</h3>
+          <div class="value" style="font-size:1rem;">Jetzt packen</div>
+          <div class="note" style="margin-top:8px;">Alle Gegenstände zum Abhaken vor der Abreise</div>
+          <div style="margin-top:14px;display:flex;align-items:center;gap:10px;">
+            <div style="flex:1;background:var(--gray-100);border-radius:99px;height:5px;overflow:hidden;">
+              <div class="cl-bar" style="height:5px;border-radius:99px;background:#2563eb;width:0%;transition:width .4s;"></div>
+            </div>
+            <span class="cl-count" style="font-size:.75rem;font-weight:600;color:var(--gray-400);white-space:nowrap;">— / —</span>
+          </div>
+          <div style="margin-top:10px;">
+            <span style="display:inline-block;background:#eff6ff;color:#2563eb;border-radius:99px;padding:4px 12px;font-size:.75rem;font-weight:600;">Vor Abreise</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- OFFENE FRAGEN -->
+  <section class="section">
+    <div class="section-title"><span class="icon">❓</span> Offene Themen — noch zu klären</div>
+
+    <div class="checklist">
+      <div class="checklist-group">
+        <h4 style="color:var(--red);">Kritisch — sofort klären</h4>
+        <div class="checklist-cols">
+          <div class="checklist-item"><span class="status" style="color:var(--red);">!</span><span><strong>Regenhose</strong> — fehlt komplett in der Packliste; Regenjacke allein reicht nicht bei 130 km/Tag im Regen</span></div>
+          <div class="checklist-item"><span class="status" style="color:var(--red);">!</span><span><strong>Unterkunft Hauptsaison</strong> — Lindau/Bregenz im Juni oft ausgebucht; Plan definieren: ab wann spätestens unterwegs buchen?</span></div>
+          <div class="checklist-item"><span class="status" style="color:var(--red);">!</span><span><strong>Schwerer Defekt — kein Plan</strong> — Was bei Speichenbruch oder defekter Schaltung? Fahrradwerkstätten entlang Route recherchieren; ADAC-Pannenschutz Rad prüfen</span></div>
+        </div>
+      </div>
+      <div class="checklist-group">
+        <h4 style="color:var(--amber);">Wichtig — vor Abfahrt klären</h4>
+        <div class="checklist-cols">
+          <div class="checklist-item"><span class="status status-todo">!</span><span><strong>Wassernachfüllen</strong> — 2 Flaschen reichen nicht für 6–7 h Fahrt; Nachfüllpunkte auf der Route markieren (Bäckereien, Brunnen, Restaurants)</span></div>
+          <div class="checklist-item"><span class="status status-todo">!</span><span><strong>Startzeit pro Etappe</strong> — Etappe 2 hat 143 km; bei Ø 20 km/h ~8 h reine Fahrzeit; spätestens 8–9 Uhr aufbrechen</span></div>
+          <div class="checklist-item"><span class="status status-todo">!</span><span><strong>Fahrrad-Service</strong> — professionelle Werkstatt-Inspektion 1–2 Wochen vor Abfahrt (Bremsen, Lager, Schaltung, Speichenspannung)</span></div>
+          <div class="checklist-item"><span class="status status-todo">!</span><span><strong>Arm-/Beinlinge</strong> — Juni morgens 12–15 °C am See; leichte Wärmeschicht für den Start fehlt in der Packliste</span></div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+  </section>
+
+</main>
+
+<footer>Zuletzt aktualisiert: 29.05.2026 &nbsp;·&nbsp; 🚴 Bodensee Radtour Planer</footer>
+
+<script>
+  document.querySelectorAll('.card[data-ls-key]').forEach(card => {
+    const key = card.dataset.lsKey;
+    const total = parseInt(localStorage.getItem(key + '-total') || '0');
+    const state = JSON.parse(localStorage.getItem(key) || '{}');
+    const done = Object.values(state).filter(v => v === true).length;
+    const bar = card.querySelector('.cl-bar');
+    const count = card.querySelector('.cl-count');
+    if (total > 0) {
+      bar.style.width = (done / total * 100) + '%';
+      count.textContent = done + ' / ' + total;
+      if (done === total) count.style.color = '#16a34a';
+    }
+  });
+</script>
+
+</body>
+</html>
