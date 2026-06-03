@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pumpen-Fehlercodes — Bodensee Radtour</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent:      #2563eb;
+      --green:       #16a34a;
+      --green-dim:   #f0fdf4;
+      --amber:       #d97706;
+      --amber-dim:   #fffbeb;
+      --red:         #dc2626;
+      --red-dim:     #fef2f2;
+      --gray-50:     #f8fafc;
+      --gray-100:    #f1f5f9;
+      --gray-200:    #e2e8f0;
+      --gray-400:    #94a3b8;
+      --gray-500:    #64748b;
+      --gray-700:    #334155;
+      --gray-900:    #0f172a;
+      --radius:      14px;
+      --shadow-sm:   0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-900);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: linear-gradient(150deg, #1e40af 0%, #1d4ed8 45%, #0369a1 100%);
+      color: #fff;
+      padding: 36px 40px 52px;
+      position: relative;
+      overflow: hidden;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 32px;
+      background: var(--gray-50);
+      clip-path: ellipse(55% 100% at 50% 100%);
+    }
+    .header-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    .header-left h1 { font-family: 'Oswald', sans-serif; font-size: 2rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+    .header-left p { opacity: .75; font-size: .9rem; margin-top: 4px; }
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.25);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 99px;
+      padding: 7px 16px;
+      font-size: .82rem;
+      font-weight: 500;
+      transition: background .15s;
+    }
+    .back-btn:hover { background: rgba(255,255,255,.25); }
+
+    /* ── MAIN ── */
+    main {
+      width: 80%;
+      max-width: 900px;
+      margin: 28px auto 72px;
+    }
+
+    /* ── INFO BOX ── */
+    .info-box {
+      background: var(--amber-dim);
+      border: 1px solid #fbbf24;
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      font-size: .9rem;
+      color: var(--gray-900);
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .info-box::before { content: '⚡'; font-size: 1.3rem; flex-shrink: 0; }
+
+    /* ── ERROR TABLE ── */
+    .error-table-wrap {
+      background: #fff;
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-sm);
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+    .error-table {
+      width: 100%;
+      min-width: 600px;
+      border-collapse: collapse;
+    }
+    .error-table th {
+      background: var(--gray-50);
+      color: var(--gray-500);
+      padding: 12px 18px;
+      text-align: left;
+      font-size: .75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      border-bottom: 2px solid var(--gray-200);
+    }
+    .error-table td {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--gray-100);
+      font-size: .9rem;
+      color: var(--gray-700);
+      vertical-align: top;
+    }
+    .error-table tr:last-child td { border-bottom: none; }
+    .error-table tbody tr:hover td { background: var(--gray-50); }
+
+    /* Error Code Column */
+    .error-code {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      white-space: nowrap;
+      padding-right: 24px;
+    }
+    .error-code.ee2 { color: #e0580c; }
+    .error-code.ee7 { color: #d97706; }
+    .error-code.ee8 { color: #ea580c; }
+    .error-code.hot { color: var(--red); }
+
+    /* Description Column */
+    .error-description {
+      font-weight: 500;
+      color: var(--gray-900);
+    }
+
+    /* Solution Column */
+    .error-solution {
+      background: var(--green-dim);
+      color: var(--green);
+      font-weight: 500;
+      border-radius: 6px;
+      padding: 6px 12px;
+      display: inline-block;
+      font-size: .85rem;
+    }
+
+    /* ── LEGEND ── */
+    .legend {
+      background: #fff;
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-sm);
+      padding: 20px 24px;
+      margin-top: 24px;
+    }
+    .legend h3 {
+      font-size: .85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--gray-500);
+      margin-bottom: 14px;
+    }
+    .legend-items { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+    .legend-item { display: flex; gap: 10px; align-items: center; font-size: .9rem; }
+    .legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+    .dot-ee { background: #e0580c; }
+    .dot-hot { background: var(--red); }
+
+    @media (max-width: 960px) {
+      main {
+        width: 94%;
+      }
+      .header-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .back-btn {
+        align-self: flex-start;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .error-table { min-width: 500px; }
+      .error-table th,
+      .error-table td { padding: 10px 12px; font-size: .84rem; }
+      .error-code { font-size: .95rem; padding-right: 14px; }
+      .legend-items { grid-template-columns: 1fr; }
+      header { padding: 24px 20px 40px; }
+      .header-left h1 { font-size: 1.5rem; }
+    }
+
+    footer {
+      text-align: center;
+      color: var(--gray-400);
+      font-size: .78rem;
+      padding: 28px 20px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-left">
+      <h1>⚡ Pumpen-Fehlercodes</h1>
+      <p>Peakspek AS250PRO — Schnelle Hilfe unterwegs</p>
+    </div>
+    <a href="index.html" class="back-btn">← Zurück</a>
+  </div>
+</header>
+
+<main>
+  <div class="info-box">
+    Diese Seite enthält alle wichtigen Fehlercodes für deine elektrische Pumpe. Speichere diese Seite offline, um sie unterwegs schnell abrufen zu können.
+  </div>
+
+  <div class="error-table-wrap">
+    <table class="error-table">
+      <thead>
+        <tr>
+          <th style="width: 15%;">Code</th>
+          <th style="width: 35%;">Fehler</th>
+          <th style="width: 50%;">Lösung</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="error-code ee2">EE2</td>
+          <td class="error-description">Überstrombegrenzung</td>
+          <td><span class="error-solution">Ausschalten und neu starten</span></td>
+        </tr>
+        <tr>
+          <td class="error-code ee7">EE7</td>
+          <td class="error-description">Abnormale Motorgeschwindigkeit</td>
+          <td><span class="error-solution">Ausschalten und neu starten</span></td>
+        </tr>
+        <tr>
+          <td class="error-code ee8">EE8</td>
+          <td class="error-description">Druckmanometer-Fehler</td>
+          <td><span class="error-solution">Ausschalten und neu starten</span></td>
+        </tr>
+        <tr>
+          <td class="error-code hot">HOT</td>
+          <td class="error-description">Übertemperatur-Warnung</td>
+          <td><span class="error-solution">10 Min. Pause, sonst ist der Akku überanstrengt</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="legend">
+    <h3>ℹ️ Tipps zur Fehlerbehebung</h3>
+    <div class="legend-items">
+      <div class="legend-item">
+        <div class="legend-dot dot-ee"></div>
+        <span><strong>EE-Fehler (2, 7, 8):</strong> Technische Probleme — Ein- und Ausschalten sollte helfen</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot dot-hot"></div>
+        <span><strong>HOT:</strong> Thermisches Problem — Lass die Pumpe ruhen &amp; vermeide Dauerbelastung in der Sonne</span>
+      </div>
+      <div class="legend-item">
+        <span><strong>Backup-Plan:</strong> Falls die Pumpe nicht funktioniert, hast du CO₂-Kartuschen dabei — diese sind zuverlässiger!</span>
+      </div>
+      <div class="legend-item">
+        <span><strong>Batterie prüfen:</strong> Stelle vor jeder Etappe sicher, dass die Pumpe vollständig geladen ist</span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  Bodensee Radtour · Juni 2026
+</footer>
+
+</body>
+</html>
