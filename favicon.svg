@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e40af"/>
+      <stop offset="100%" style="stop-color:#0369a1"/>
+    </linearGradient>
+  </defs>
+  <!-- Background circle -->
+  <circle cx="32" cy="32" r="32" fill="url(#bg)"/>
+  <!-- Rear wheel -->
+  <circle cx="18" cy="40" r="10" fill="none" stroke="#fff" stroke-width="2.5"/>
+  <!-- Front wheel -->
+  <circle cx="46" cy="40" r="10" fill="none" stroke="#fff" stroke-width="2.5"/>
+  <!-- Rear wheel hub -->
+  <circle cx="18" cy="40" r="2" fill="#fff"/>
+  <!-- Front wheel hub -->
+  <circle cx="46" cy="40" r="2" fill="#fff"/>
+  <!-- Frame: chainstay (rear axle to bottom bracket) -->
+  <line x1="18" y1="40" x2="30" y2="33" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Frame: seat tube -->
+  <line x1="30" y1="33" x2="27" y2="22" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Frame: top tube + down tube merging at head tube -->
+  <line x1="27" y1="22" x2="40" y2="22" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Frame: down tube (head tube to bottom bracket) -->
+  <line x1="40" y1="22" x2="30" y2="33" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Fork (head tube to front axle) -->
+  <line x1="40" y1="22" x2="46" y2="40" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Seat stay (seat tube top to rear axle) -->
+  <line x1="27" y1="22" x2="18" y2="40" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+  <!-- Saddle -->
+  <line x1="23" y1="20" x2="31" y2="20" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="27" y1="20" x2="27" y2="23" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+  <!-- Handlebar -->
+  <line x1="38" y1="19" x2="43" y2="19" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="40" y1="19" x2="40" y2="23" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+</svg>

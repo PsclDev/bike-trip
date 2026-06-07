@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Schlauch reparieren — Bodensee Radtour</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:         #dc2626;
+      --red-dim:     #fef2f2;
+      --amber:       #d97706;
+      --amber-dim:   #fffbeb;
+      --green:       #16a34a;
+      --green-dim:   #f0fdf4;
+      --gray-50:     #f8fafc;
+      --gray-100:    #f1f5f9;
+      --gray-200:    #e2e8f0;
+      --gray-400:    #94a3b8;
+      --gray-500:    #64748b;
+      --gray-700:    #334155;
+      --gray-900:    #0f172a;
+      --radius:      14px;
+      --shadow-sm:   0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+      --shadow:      0 4px 16px rgba(0,0,0,.07);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-900);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: linear-gradient(150deg, #7f1d1d 0%, #991b1b 50%, #b91c1c 100%);
+      color: #fff;
+      padding: 36px 40px 52px;
+      position: relative;
+      overflow: hidden;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 32px;
+      background: var(--gray-50);
+      clip-path: ellipse(55% 100% at 50% 100%);
+    }
+    .header-inner {
+      max-width: 680px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .header-left h1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .header-left p { opacity: .75; font-size: .9rem; margin-top: 4px; }
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.25);
+      color: #fff; text-decoration: none;
+      border-radius: 99px; padding: 7px 16px;
+      font-size: .82rem; font-weight: 500;
+      transition: background .15s;
+    }
+    .back-btn:hover { background: rgba(255,255,255,.25); }
+
+    /* ── MAIN ── */
+    main {
+      width: 80%;
+      max-width: 680px;
+      margin: 28px auto 72px;
+    }
+
+    /* ── HINWEIS ── */
+    .info-box {
+      background: var(--amber-dim);
+      border: 1px solid #fbbf24;
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 28px;
+      font-size: .9rem;
+      color: var(--gray-900);
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .info-box .icon { font-size: 1.3rem; flex-shrink: 0; }
+
+    /* ── STEPS ── */
+    .steps { display: flex; flex-direction: column; gap: 16px; }
+
+    .step {
+      background: #fff;
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-sm);
+      padding: 22px 24px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--red);
+      color: #fff;
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .step-content { flex: 1; }
+    .step-content h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 6px;
+    }
+    .step-content p {
+      font-size: .9rem;
+      color: var(--gray-700);
+    }
+
+    .step-note {
+      margin-top: 10px;
+      background: var(--amber-dim);
+      border-left: 3px solid var(--amber);
+      border-radius: 0 6px 6px 0;
+      padding: 8px 12px;
+      font-size: .85rem;
+      color: var(--gray-700);
+    }
+    .step-note strong { color: var(--amber); }
+
+    .step-highlight {
+      display: inline-block;
+      background: var(--red-dim);
+      color: var(--red);
+      font-weight: 700;
+      border-radius: 4px;
+      padding: 0 5px;
+    }
+
+    /* ── DONE BADGE ── */
+    .done-badge {
+      background: var(--green-dim);
+      border: 1px solid #86efac;
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      text-align: center;
+      margin-top: 8px;
+    }
+    .done-badge .emoji { font-size: 2rem; display: block; margin-bottom: 8px; }
+    .done-badge p { color: var(--green); font-weight: 600; font-size: 1rem; }
+    .done-badge small { color: var(--gray-500); font-size: .85rem; }
+
+    @media (max-width: 680px) {
+      main { width: 94%; }
+      header { padding: 28px 20px 48px; }
+      .header-inner { flex-direction: column; align-items: flex-start; }
+      .step { gap: 14px; padding: 16px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-left">
+      <h1>🔩 Schlauch reparieren</h1>
+      <p>Schritt-für-Schritt Anleitung — Reifenpanne unterwegs</p>
+    </div>
+    <a href="index.html" class="back-btn">← Zurück</a>
+  </div>
+</header>
+
+<main>
+
+  <div class="info-box">
+    <span class="icon">⚠️</span>
+    <div>
+      <strong>Flickzeug griffbereit?</strong> Du brauchst: Hebel / Crowbar, Schleifpapier oder Metallfeile, Flicken-Set mit Kleber und Folie. Anleitung gilt für Standard-Schlauch-Reparatur (nicht Tubeless).
+    </div>
+  </div>
+
+  <div class="steps">
+
+    <div class="step">
+      <div class="step-number">1</div>
+      <div class="step-content">
+        <h3>Restluft ablassen</h3>
+        <p>Hebel / Crowbar ansetzen und die verbleibende Luft vollständig aus dem Reifen ablassen.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">2</div>
+      <div class="step-content">
+        <h3>Mantel öffnen &amp; Schlauch herausnehmen</h3>
+        <p>Mit dem Reifenheber den Außenmantel aufhebeln und den Schlauch vollständig entnehmen.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">3</div>
+      <div class="step-content">
+        <h3>Schadstelle anrauen &amp; reinigen</h3>
+        <p>Die Umgebung des Lochs mit einer Metallfeile oder Schleifpapier anrauen, bis die Oberfläche rau ist. Anschließend die Stelle sauber wischen.</p>
+        <div class="step-note">
+          <strong>Hinweis:</strong> Die angeraute Fläche muss größer sein als der Flicken. Oberfläche nach dem Schleifen gut reinigen.
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">4</div>
+      <div class="step-content">
+        <h3>Kleber auftragen</h3>
+        <p>Kleber gleichmäßig auf die angeraute Stelle auftragen und <span class="step-highlight">ca. 1 Minute</span> trocknen lassen.</p>
+        <div class="step-note">
+          <strong>Hinweis:</strong> Kleber großzügiger auftragen als der Flicken — er muss die gesamte Flickenfläche abdecken.
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">5</div>
+      <div class="step-content">
+        <h3>Flicken aufdrücken</h3>
+        <p>Den Flicken (mit Schutzfolie) fest auf die Klebestelle drücken — das Loch muss vollständig abgedeckt sein. Jeden Bereich gleichmäßig fest andrücken.</p>
+        <p style="margin-top:8px;">Danach <span class="step-highlight">10 Minuten</span> warten, damit der Flicken vollständig mit dem Schlauch verbindet.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">6</div>
+      <div class="step-content">
+        <h3>Schutzfolie abziehen</h3>
+        <p>Die Schutzfolie vorsichtig abziehen. Der Schlauch ist jetzt bereit zum Aufpumpen.</p>
+      </div>
+    </div>
+
+    <div class="done-badge">
+      <span class="emoji">✅</span>
+      <p>Reparatur abgeschlossen!</p>
+      <small>Schlauch einlegen, Mantel aufziehen, Reifen auf Betriebsdruck aufpumpen.</small>
+    </div>
+
+  </div>
+</main>
+
+</body>
+</html>
