@@ -153,8 +153,25 @@
     .custom-check svg { display: none; }
     .pack-item.checked .custom-check svg { display: block; }
 
-    .item-label { font-size: .9rem; color: var(--gray-700); flex: 1; }
+    .item-label { font-size: .9rem; color: var(--gray-700); }
     .item-note { font-size: .76rem; color: var(--gray-400); margin-top: 1px; }
+    .item-text { flex: 1; }
+
+    .bag-badge {
+      flex-shrink: 0;
+      font-size: .68rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 99px;
+      white-space: nowrap;
+      letter-spacing: .02em;
+    }
+    .bag-lenker { background: #dbeafe; color: #1d4ed8; }
+    .bag-oben   { background: #ccfbf1; color: #0f766e; }
+    .bag-unten  { background: #ffedd5; color: #c2410c; }
+    .bag-sattel { background: #ede9fe; color: #6d28d9; }
+    .bag-am-rad { background: var(--gray-100); color: var(--gray-500); }
+    .pack-item.checked .bag-badge { opacity: .4; }
   </style>
 </head>
 <body>
@@ -189,90 +206,97 @@
 </main>
 
 <script>
+  const BAG = {
+    lenker: { label: 'Lenkertasche',   cls: 'bag-lenker' },
+    oben:   { label: 'Rahmen oben',    cls: 'bag-oben'   },
+    unten:  { label: 'Rahmen unten',   cls: 'bag-unten'  },
+    sattel: { label: 'Satteltasche',   cls: 'bag-sattel' },
+    amrad:  { label: 'Am Rad',         cls: 'bag-am-rad' },
+  };
+
   const GROUPS = [
     {
       title: '🚲 Fahrrad & Technik',
       items: [
-        { id: 'garmin',       label: 'Garmin Edge',                   note: 'GPS-Navigation — Tour geladen?' },
-        { id: 'satteltasche', label: 'Kleine Satteltasche',           note: 'Schloss & Schlüssel' },
-        { id: 'seatpack',     label: 'Seat-Pack groß (Ortlieb 11L)',  note: 'Für Kleidung & Kulturbeutel' },
-        { id: 'framebag',     label: 'Rahmentasche (Rovativ 2.2L)',   note: 'Snacks, Handy, Dokumente' },
-        { id: 'powerbank',    label: 'Powerbank',                     note: 'Geladen?' },
-        { id: 'schlaeuche',   label: 'Ersatzschläuche (2×)',          note: 'Schwalbe SV17 700C 28"' },
-        { id: 'flickset',     label: 'Flickset',                      note: '18 Patches, Rubber Solution, Metal File, Reifenheber' },
-        { id: 'pumpe',        label: 'Elektrische Pumpe',             note: 'Peakspek AS250PRO — geladen?' },
-        { id: 'co2',          label: 'CO2-Kartuschen (2×)',           note: 'Backup zur elektr. Pumpe' },
-        { id: 'multitool',    label: 'Multitool',                     note: 'Inbus + Kreuzschlitz' },
-        { id: 'kettenschl',   label: 'Kettenschloss (Quick Link 2×)', note: 'Passend zur Kettengröße' },
-        { id: 'kabelbinder',  label: 'Kabelbinder (4×)',              note: 'Notfall-Fixes' },
-        { id: 'ducttape',     label: 'Duct Tape',                     note: 'Kleines Stück — universeller Notfallhelfer' },
+        { id: 'garmin',       label: 'Garmin Edge',                   note: 'GPS-Navigation — Tour geladen?',              bag: 'amrad'  },
+        { id: 'satteltasche', label: 'Kleine Satteltasche',           note: 'Schloss & Schlüssel',                         bag: 'amrad'  },
+        { id: 'seatpack',     label: 'Satteltasche groß (12L)',       note: 'Für Kleidung & Kulturbeutel',                 bag: 'amrad'  },
+        { id: 'framebag',     label: 'Rahmentaschen (oben + unten)',  note: 'Snacks, Handy, Dokumente / Werkzeug',         bag: 'amrad'  },
+        { id: 'schlaeuche',   label: 'Ersatzschläuche (2×)',          note: 'Schwalbe SV17 700C 28"',                      bag: 'sattel' },
+        { id: 'flickset',     label: 'Flickset',                      note: '18 Patches, Rubber Solution, Metal File, Reifenheber', bag: 'unten' },
+        { id: 'pumpe',        label: 'Elektrische Pumpe',             note: 'Peakspek AS250PRO — geladen?',                bag: 'lenker' },
+        { id: 'co2',          label: 'CO2-Kartuschen (2×)',           note: 'Backup zur elektr. Pumpe',                    bag: 'unten'  },
+        { id: 'multitool',    label: 'Multitool',                     note: 'Inbus + Kreuzschlitz',                        bag: 'unten'  },
+        { id: 'kettenschl',   label: 'Kettenschloss (Quick Link 2×)', note: 'Passend zur Kettengröße',                     bag: 'unten'  },
+        { id: 'kabelbinder',  label: 'Kabelbinder (4×)',              note: 'Notfall-Fixes',                               bag: 'unten'  },
+        { id: 'ducttape',     label: 'Duct Tape',                     note: 'Kleines Stück — universeller Notfallhelfer',  bag: 'unten'  },
       ]
     },
     {
       title: '👕 Kleidung',
       items: [
-        { id: 'helm',         label: 'Helm',                          note: '' },
-        { id: 'radhose',      label: 'Fahrradhose mit Sitzpolster',   note: '2× empfohlen' },
-        { id: 'trikot',       label: 'Fahrradtrikot',                 note: '' },
-        { id: 'clickschuhe',  label: 'Clickschuhe',                   note: 'Fürs Rad' },
-        { id: 'handschuhe',   label: 'Handschuhe',                    note: '' },
-        { id: 'regenjacke',   label: 'Regenjacke',                    note: 'Leicht & kompakt' },
-        { id: 'sonnenbrille', label: 'Sonnenbrille',                  note: '' },
-        { id: 'tshirt',       label: 'T-Shirts Freizeit (2×)',        note: '' },
-        { id: 'hose',         label: 'Hose Freizeit (1×)',            note: '' },
-        { id: 'unterwäsche',  label: 'Unterwäsche (2×)',              note: '' },
-        { id: 'socken',       label: 'Socken — 2× Rad, 1× Freizeit', note: '' },
-        { id: 'sandalen',     label: 'Schuhe für abends',             note: '' },
+        { id: 'helm',         label: 'Helm',                          note: '',                                            bag: 'amrad'  },
+        { id: 'radhose',      label: 'Fahrradhose mit Sitzpolster',   note: '2× empfohlen',                               bag: 'sattel' },
+        { id: 'trikot',       label: 'Fahrradtrikot',                 note: '',                                            bag: 'sattel' },
+        { id: 'clickschuhe',  label: 'Clickschuhe',                   note: 'Fürs Rad',                                   bag: 'sattel' },
+        { id: 'handschuhe',   label: 'Handschuhe',                    note: '',                                            bag: 'lenker' },
+        { id: 'regenjacke',   label: 'Regenjacke',                    note: 'Leicht & kompakt',                           bag: 'lenker' },
+        { id: 'sonnenbrille', label: 'Sonnenbrille',                  note: '',                                            bag: 'oben'   },
+        { id: 'tshirt',       label: 'T-Shirts Freizeit (2×)',        note: '',                                            bag: 'sattel' },
+        { id: 'hose',         label: 'Hose Freizeit (1×)',            note: '',                                            bag: 'sattel' },
+        { id: 'unterwäsche',  label: 'Unterwäsche (2×)',              note: '',                                            bag: 'sattel' },
+        { id: 'socken',       label: 'Socken — 2× Rad, 1× Freizeit', note: '',                                            bag: 'sattel' },
+        { id: 'sandalen',     label: 'Schuhe für abends',             note: '',                                            bag: 'lenker' },
       ]
     },
     {
       title: '🧴 Kulturbeutel & Hygiene',
       items: [
-        { id: 'kulturbeutel', label: 'Kulturbeutel',                  note: '' },
-        { id: 'zahnhygiene',  label: 'Zahnbürste & Zahnpasta',       note: 'Reisegröße' },
-        { id: 'duschgel',     label: 'Duschgel & Shampoo',           note: 'Reisegröße' },
-        { id: 'deo',          label: 'Deo',                           note: '' },
-        { id: 'rasierer',     label: 'Rasierer',                      note: '' },
-        { id: 'chamois',      label: 'Chamois-Creme',                 note: 'Morgens vor jeder Etappe auftragen!' },
-        { id: 'handtuch',     label: 'Kleines Handtuch (Microfiber)', note: 'Falls Hotel keins hat' },
+        { id: 'kulturbeutel', label: 'Kulturbeutel',                  note: '',                                            bag: 'sattel' },
+        { id: 'zahnhygiene',  label: 'Zahnbürste & Zahnpasta',       note: 'Reisegröße',                                  bag: 'sattel' },
+        { id: 'duschgel',     label: 'Duschgel & Shampoo',           note: 'Reisegröße',                                  bag: 'sattel' },
+        { id: 'deo',          label: 'Deo',                           note: '',                                            bag: 'sattel' },
+        { id: 'rasierer',     label: 'Rasierer',                      note: '',                                            bag: 'sattel' },
+        { id: 'chamois',      label: 'Chamois-Creme',                 note: 'Morgens vor jeder Etappe auftragen!',         bag: 'oben'   },
+        { id: 'handtuch',     label: 'Kleines Handtuch (Microfiber)', note: 'Falls Hotel keins hat',                       bag: 'sattel' },
       ]
     },
     {
       title: '💊 Gesundheit & Pflege',
       items: [
-        { id: 'sonnenschutz', label: 'Sonnenschutz LSF 50+',          note: 'Sport, wasserfest' },
-        { id: 'lippenpflege', label: 'Lippenpflege LSF',              note: 'Oft vergessen — Sonne + Wind' },
-        { id: 'muecken',      label: 'Mückenspray',                   note: 'Abends am See' },
-        { id: 'ibuprofen',    label: 'Schmerzmittel / Ibuprofen',     note: '' },
-        { id: 'blasenpfl',    label: 'Blasenpflaster (Compeed)',      note: '' },
-        { id: 'pflasterset',  label: 'Pflasterset',                   note: 'Schürfwunden, kleine Schnitte' },
+        { id: 'sonnenschutz', label: 'Sonnenschutz LSF 50+',          note: 'Sport, wasserfest',                           bag: 'oben'   },
+        { id: 'lippenpflege', label: 'Lippenpflege LSF',              note: 'Oft vergessen — Sonne + Wind',                bag: 'oben'   },
+        { id: 'muecken',      label: 'Mückenspray',                   note: 'Abends am See',                               bag: 'sattel' },
+        { id: 'ibuprofen',    label: 'Schmerzmittel / Ibuprofen',     note: '',                                            bag: 'oben'   },
+        { id: 'blasenpfl',    label: 'Blasenpflaster (Compeed)',      note: '',                                            bag: 'oben'   },
+        { id: 'pflasterset',  label: 'Pflasterset',                   note: 'Schürfwunden, kleine Schnitte',               bag: 'unten'  },
       ]
     },
     {
       title: '🔌 Elektronik & Kabel',
       items: [
-        { id: 'powerbank-elek', label: 'Powerbank',                   note: 'Geladen?' },
-        { id: 'kopfhoerer',     label: 'Kopfhörer (USB-C)',           note: '' },
-        { id: 'kabel-usbc',     label: 'USB-C Kabel',                 note: 'Für Handy, Garmin, Pumpe & Kopfhörer' },
-        { id: 'kabel-watch',    label: 'Apple Watch Ladekabel',       note: 'Eigener Anschluss — nicht vergessen!' },
-        { id: 'netzteil',       label: 'USB-C Netzteil (Stecker)',    note: 'Für Hotelsteckdose' },
+        { id: 'powerbank-elek', label: 'Powerbank',                   note: 'Geladen?',                                    bag: 'oben'   },
+        { id: 'kopfhoerer',     label: 'Kopfhörer (USB-C)',           note: '',                                            bag: 'oben'   },
+        { id: 'kabel-usbc',     label: 'USB-C Kabel',                 note: 'Für Handy, Garmin, Pumpe & Kopfhörer',       bag: 'oben'   },
+        { id: 'kabel-watch',    label: 'Apple Watch Ladekabel',       note: 'Eigener Anschluss — nicht vergessen!',        bag: 'sattel' },
+        { id: 'netzteil',       label: 'USB-C Netzteil (Stecker)',    note: 'Für Hotelsteckdose',                          bag: 'sattel' },
       ]
     },
     {
       title: '📄 Dokumente & Zahlungsmittel',
       items: [
-        { id: 'ausweis',      label: 'Personalausweis',                note: 'Pflicht für AT & CH' },
-        { id: 'ehic',         label: 'BKK Krankenkassenkarte',         note: 'EHIC auf der Rückseite' },
-        { id: 'ing-karte',    label: 'ING Karte',                      note: 'Kostenlos CHF abheben in CH' },
-        { id: 'eur',          label: 'Bargeld EUR',                    note: 'Für DE & AT' },
-        { id: 'handy',        label: 'Handy',                          note: 'Roaming CH vorher prüfen!' },
+        { id: 'ausweis',      label: 'Personalausweis',                note: 'Pflicht für AT & CH',                        bag: 'oben'   },
+        { id: 'ehic',         label: 'BKK Krankenkassenkarte',         note: 'EHIC auf der Rückseite',                     bag: 'oben'   },
+        { id: 'ing-karte',    label: 'ING Karte',                      note: 'Kostenlos CHF abheben in CH',                bag: 'oben'   },
+        { id: 'eur',          label: 'Bargeld EUR',                    note: 'Für DE & AT',                                bag: 'oben'   },
+        { id: 'handy',        label: 'Handy',                          note: 'Roaming CH vorher prüfen!',                  bag: 'oben'   },
       ]
     },
     {
       title: '🍫 Verpflegung für unterwegs',
       items: [
-        { id: 'trinkflaschen',label: 'Trinkflaschen (2×)',            note: 'Befüllt starten' },
-        { id: 'riegel',       label: 'Energieriegel / Gels',          note: 'Alle 30–40 km essen — genug für 2 Tage!' },
+        { id: 'trinkflaschen',label: 'Trinkflaschen (2×)',            note: 'Befüllt starten',                             bag: 'amrad'  },
+        { id: 'riegel',       label: 'Energieriegel / Gels',          note: 'Alle 30–40 km essen — genug für 2 Tage!',    bag: 'oben'   },
       ]
     },
   ];
@@ -338,6 +362,7 @@
       group.items.forEach(item => {
         const row = document.createElement('label');
         row.className = 'pack-item' + (state[item.id] ? ' checked' : '');
+        const bag = item.bag ? BAG[item.bag] : null;
         row.innerHTML = `
           <input type="checkbox" ${state[item.id] ? 'checked' : ''} />
           <div class="custom-check">
@@ -345,10 +370,11 @@
               <path d="M1 5l3.5 3.5L11 1" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
-          <div>
+          <div class="item-text">
             <div class="item-label">${item.label}</div>
             ${item.note ? `<div class="item-note">${item.note}</div>` : ''}
           </div>
+          ${bag ? `<span class="bag-badge ${bag.cls}">${bag.label}</span>` : ''}
         `;
         row.addEventListener('click', () => toggle(row, item.id));
         groupEl.appendChild(row);
