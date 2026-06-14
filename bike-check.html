@@ -283,7 +283,7 @@
       groupEl.appendChild(header);
 
       group.items.forEach(item => {
-        const row = document.createElement('label');
+        const row = document.createElement('div');
         row.className = 'pack-item' + (state[item.id] ? ' checked' : '') + (item.warning ? ' item-warning' : '');
         row.innerHTML = `
           <input type="checkbox" ${state[item.id] ? 'checked' : ''} />
